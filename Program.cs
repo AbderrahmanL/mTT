@@ -3,6 +3,9 @@ using mTT.Components;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSingleton<MTT.Services.TimetableService>();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 

@@ -1,0 +1,62 @@
+@page "/timetable"
+@inject MTT.Services.TimetableService TimetableService
+
+<h3>Generated Timetable</h3>
+
+<button @onclick="GenerateTimetable">Generate Timetable</button>
+
+@if (timetableSlots != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var slot in timetableSlots)
+            {
+                <tr>
+                    <td>@slot.Class.Name</td>
+                    <td>@slot.Subject.Name</td>
+                    <td>@slot.Teacher.Name</td>
+                    <td>@slot.Classroom.RoomNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<MTT.Timetable.ScheduleSlot> timetableSlots;
+
+    private async Task GenerateTimetable()
+    {
+        // Sample JSON input data
+        string jsonInput = @"{
+            ""Teachers"": [
+                { ""Name"": ""Mr. Smith"" },
+                { ""Name"": ""Ms. Johnson"" }
+            ],
+            ""Classes"": [
+                { ""Name"": ""Class A"" },
+                { ""Name"": ""Class B"" }
+            ],
+            ""Classrooms"": [
+                { ""RoomNumber"": ""101"", ""Capacity"": 30 },
+                { ""RoomNumber"": ""102"", ""Capacity"": 25 }
+            ],
+            ""Subjects"": [
+                { ""Name"": ""Math"", ""HoursPerWeek"": 5 },
+                { ""Name"": ""Science"", ""HoursPerWeek"": 4 }
+            ]
+        }";
+
+        // Generate the timetable
+        var timetable = TimetableService.GenerateTimetableFromJson(jsonInput);
+        timetableSlots = timetable.Slots;
+    }
+}
